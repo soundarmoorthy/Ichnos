@@ -1,0 +1,1 @@
+This project is an SDK aimed at providing a set of API's to easily hook into the Visual Studio debug sub-system and provide a level of tracing options to the user during a debug session.

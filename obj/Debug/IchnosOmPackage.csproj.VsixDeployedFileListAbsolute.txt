@@ -1,0 +1,4 @@
+C:\Users\sounderarajan.d\AppData\Local\Microsoft\VisualStudio\10.0Exp\Extensions\AVREngineer\IchnosOmPackage\1.0\\IchnosOmPackage.dll
+C:\Users\sounderarajan.d\AppData\Local\Microsoft\VisualStudio\10.0Exp\Extensions\AVREngineer\IchnosOmPackage\1.0\\IchnosOmPackage.pkgdef
+C:\Users\sounderarajan.d\AppData\Local\Microsoft\VisualStudio\10.0Exp\Extensions\AVREngineer\IchnosOmPackage\1.0\\extension.vsixmanifest
+C:\Users\sounderarajan.d\AppData\Local\Microsoft\VisualStudio\10.0Exp\Extensions\AVREngineer\IchnosOmPackage\1.0\\IchnosOmPackage.pdb

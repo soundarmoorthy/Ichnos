@@ -1,0 +1,16 @@
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IchnosOmPackage.csproj.ResolveComReference.cache
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\VSPackage.resources
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IEngineer.Studio.Extensions.Ichnos.Resources.resources
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\IchnosOmPackage.dll
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\IchnosOmPackage.pdb
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\IchnosOmPackage.pkgdef
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\IchnosOmPackage.vsix
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\extension.vsixmanifest
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IchnosOmPackage.dll
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IchnosOmPackage.pdb
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IchnosOmPackage.pkgdef
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IchnosOmPackage.latest.pkgdef
+C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\extension.vsixmanifest
