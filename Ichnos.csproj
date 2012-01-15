@@ -45,6 +45,8 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -53,6 +55,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
@@ -112,7 +115,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Listeners\ITraceMessageListener.cs" />
-    <Compile Include="Listeners\OutputWindowTraceListener.cs" />
+    <Compile Include="Listeners\ListenerImpl\FileStreamTraceListener.cs">
+      <Generator>MSBuild:Compile</Generator>
+    </Compile>
+    <Compile Include="Listeners\ListenerImpl\OutputWindowTraceListener.cs" />
     <Compile Include="Listeners\TraceSettings.cs" />
     <Compile Include="Listeners\TraceStreamOptions.cs" />
     <Compile Include="Names.cs" />

@@ -1,9 +1,0 @@
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\Ichnos.csproj.ResolveComReference.cache
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\IEngineer.Studio.Extensions.Ichnos.Resources.resources
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\GenerateResource.read.1.tlog
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\GenerateResource.write.1.tlog
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\Ichnos.dll
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\bin\Debug\Ichnos.pdb
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\Ichnos.dll
-C:\Users\sounderarajan.d\documents\visual studio 2010\Projects\ScotlandYard\IchnosOmPackage\obj\Debug\Ichnos.pdb

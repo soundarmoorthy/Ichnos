@@ -11,24 +11,26 @@ using IEngineer.Studio.Extensions.Ichnos;
 using System.Text;
 
 namespace IEngineer.Studio.Extension.Ichnos
-    {
+{
     public sealed class TraceManager
-        {
+    {
 
         static TraceManager manager;
 
         static TraceManager()
-            {
+        {
             manager = new TraceManager();
-            }
-
+        }
+        /// <summary>
+        /// Return a singleton instance of the TraceManager.
+        /// </summary>
         public static TraceManager Instance
+        {
+            get
             {
-                get
-                {
                 return manager;
-                }
             }
+        }
 
 
 
@@ -51,76 +53,88 @@ namespace IEngineer.Studio.Extension.Ichnos
         /// <summary>
         /// Initializes a new instance of Trace Manager
         /// </summary>
-        /// <param name="settings">A list of symbol information to trace</param>
-        /// <param name="outputStreamCollection">An enumerable collection of output stream to send the trace data</param>
-        /// <param name="disableTraceOnDebugSessionEnd">If true, the tracing option will be disabled automatically, when the debug session has finished.</param>
         private TraceManager()
-            {
+        {
 
             symbols = new List<string>();
             this.traceListeners = new List<ITraceMessageListener>();
             InitializeDTE();
-           
-            StatusReporter.Report(Resources.MsgTraceInitialized, Status.INFO);
-            }
-        
 
-       public void Disable()
-            {
-                    debuggerEvents.OnEnterBreakMode -= new _dispDebuggerEvents_OnEnterBreakModeEventHandler(DebuggerEvents_OnEnterBreakMode);
-                    StatusReporter.Report(Resources.MsgBreakEventHandlerUnsubscribed, Status.INFO);
-            }
+            StatusReporter.Report(Resources.MsgTraceInitialized, Status.INFO);
+        }
+
+
+        public void Disable()
+        {
+            debuggerEvents.OnEnterBreakMode -= new _dispDebuggerEvents_OnEnterBreakModeEventHandler(DebuggerEvents_OnEnterBreakMode);
+            StatusReporter.Report(Resources.MsgBreakEventHandlerUnsubscribed, Status.INFO);
+        }
 
         public void Enable()
-            {
+        {
             SubscribeForDebuggerEvents();
-            }
+        }
 
 
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbols">An enumerable list of symbols to be traced.</param>
+        /// <param name="listeners">An enumerable collection of listeners to which the trace data should be sent</param>
+        /// <remarks>You can use the OutputWindowTraceListener Class that is shipped by default with this library</remarks>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when, a trace session is already in progress. A trace session is in progress when the debugger had entered the debug mode.
+        /// 
+        /// </exception> 
         public void SetTraceContext(IEnumerable<string> symbols, IEnumerable<ITraceMessageListener> listeners)
-            {
+        {
             if (traceSessionInProgress)
                 throw new InvalidOperationException(Resources.ErrTraceSessionInProgress);
             this.Enable();
 
+            //Will create a thread that will process all the messages and send them to the registered trace listeners.
             InitializeTraceMessagePump();
-            
+
             lock (this.symbols)
-                {
+            {
                 this.symbols = new List<String>(symbols);
-                }
-            lock (this.traceListeners)
-                {
-                this.traceListeners = new List<ITraceMessageListener>(listeners);
-                }
             }
+            lock (this.traceListeners)
+            {
+                this.traceListeners = new List<ITraceMessageListener>(listeners);
+            }
+        }
 
         System.Threading.Thread traceMessgePumpThread;
         private void InitializeTraceMessagePump()
-            {
+        {
             if (traceMessagePumpInitialized)
-                {
+            {
                 StatusReporter.Report(Resources.MsgMessagePumpAlreadyInitialized, Status.INFO);
                 return;
-                }
+            }
 
             messages = new Queue<TraceMessageSourceEntry>();
             traceMessgePumpThread = new System.Threading.Thread(new ThreadStart(WriteToTraceListener));
+            traceMessgePumpThread.Name = "Ichnos Trace Listener";
             traceMessgePumpThread.Start();
-            }
+        }
 
 
         void InitializeDTE()
-            {
+        {
             dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
             if (dte == null)
-                {
+            {
                 dteInitialized = false;
                 throw new NullReferenceException(Resources.MsgDTEInitializedFailed);
-                }
-            
-            dteInitialized = true;
             }
+
+            dteInitialized = true;
+        }
 
         private DTE dte;
         private DebuggerEvents debuggerEvents;
@@ -131,12 +145,12 @@ namespace IEngineer.Studio.Extension.Ichnos
         /// </summary>
         /// <param name="unsubscribeOnDebugSessionEnd"></param>
         void SubscribeForDebuggerEvents()
-            {
+        {
             if (subscribedForDebuggerBreak)
-                {
+            {
                 StatusReporter.Report(Resources.MsgAlreadySubscribedForDbgBreak, Status.INFO);
                 return;
-                }
+            }
 
             if (!dteInitialized)
                 InitializeDTE();
@@ -150,168 +164,187 @@ namespace IEngineer.Studio.Extension.Ichnos
             debuggerEvents.OnEnterDesignMode += new _dispDebuggerEvents_OnEnterDesignModeEventHandler(debuggerEvents_OnEnterDesignMode);
             StatusReporter.Report(Resources.MsgDbgBreakEventSubscribeSuccess, Status.INFO);
             subscribedForDebuggerBreak = true;
-            }
+        }
 
         void debuggerEvents_OnEnterDesignMode(dbgEventReason Reason)
+        {
+            if (Reason == dbgEventReason.dbgEventReasonEndProgram || Reason == dbgEventReason.dbgEventReasonDetachProgram || Reason == dbgEventReason.dbgEventReasonStopDebugging)
             {
-                if (Reason == dbgEventReason.dbgEventReasonEndProgram || Reason == dbgEventReason.dbgEventReasonDetachProgram || Reason == dbgEventReason.dbgEventReasonStopDebugging)
-                    {
-                   }
-            traceSessionInProgress = false;
             }
+            traceSessionInProgress = false;
+        }
 
-        bool traceSessionInProgress =true;
+        bool traceSessionInProgress = false;
 
         void DebuggerEvents_OnEnterBreakMode(EnvDTE.dbgEventReason Reason, ref EnvDTE.dbgExecutionAction ExecutionAction)
-            {
+        {
             try
-                {
+            {
                 traceSessionInProgress = true;
                 Debugger debugger;
                 lock (dte)
-                    {
+                {
                     //Don't lock too much, just what is required.
                     debugger = dte.Debugger;
-                    }
+                }
 
                 if (Reason == dbgEventReason.dbgEventReasonBreakpoint)
-                    {
+                {
                     string[] symbols;
                     lock (this.symbols)
-                        {
+                    {
                         //Clone the list to be used locally.
                         symbols = new string[this.symbols.Count];
                         this.symbols.CopyTo(symbols);
-                        }
+                    }
                     foreach (var symbol in symbols)
-                        {
+                    {
                         if (!string.IsNullOrEmpty(symbol))
-                            {
+                        {
                             try
-                                {
+                            {
                                 var expression = debugger.GetExpression(symbol);
                                 if (expression.IsValidValue)
-                                    {
+                                {
                                     var breakpoint = debugger.BreakpointLastHit;
                                     var stackFrame = debugger.CurrentStackFrame;
                                     var traceMessageSource = new TraceMessageSourceEntry() { Expression = expression, Breakpoint = breakpoint, StackFrame = stackFrame };
                                     lock (messages)
-                                        {
-                                        messages.Enqueue(traceMessageSource);
-                                        }
-                                    }
-                                else
                                     {
+                                        messages.Enqueue(traceMessageSource);
+                                    }
+                                }
+                                else
+                                {
                                     string breakpointContext;
                                     var bp = dte.Debugger.BreakpointLastHit;
                                     breakpointContext = string.Format(Resources.MsgBreakpointContextFormat, expression.Name, bp.FunctionName, bp.FileLine);
                                     StatusReporter.Report(string.Format(Resources.ErrTraceSymbolInvalid, breakpointContext), Status.WARNING);
-                                    }
                                 }
+                            }
                             catch (Exception ex)
-                                {
+                            {
                                 StatusReporter.Report(string.Format(Resources.ErrorEvaulatingSymbol, symbol + ex.ToString()), Status.WARNING);
-                                }
                             }
                         }
                     }
                 }
+            }
             finally
-                {
+            {
                 //This step makes sure that the execution continues after tracing this value;
                 ExecutionAction = dbgExecutionAction.dbgExecutionActionGo;
-                }
             }
+        }
 
         private class TraceMessageSourceEntry
-            {
+        {
             public TraceMessageSourceEntry()
-                {
+            {
 
-                }
+            }
+            /// <summary>
+            /// The expression that is the result of the expression evaulator for a specified symbol
+            /// </summary>
             internal Expression Expression;
             internal Breakpoint Breakpoint;
             internal StackFrame StackFrame;
-            }
+        }
 
         private void WriteToTraceListener()
+        {
+            while (true)
             {
-            var messages = GetAllMessagesFromQueue();
-            foreach (var message in messages)
+                var messages = GetAllMessagesFromQueue();
+                foreach (var message in messages)
                 {
-                foreach (var traceListener in traceListeners)
+                    foreach (var traceListener in traceListeners)
                     {
-                    var messageAsXml = ComposeXmlMessage(message, traceListener.GetTraceOptions());
-                    lock (traceListener)
+                        var messageAsXml = ComposeXmlMessage(message, traceListener.GetTraceOptions());
+                        lock (traceListener)
                         {
-                        try
+                            try
                             {
-                            traceListener.WriteAsync(messageAsXml);
+                                traceListener.WriteAsync(messageAsXml);
                             }
-                        catch (Exception ex)
+                            catch (Exception ex)
                             {
-                            StatusReporter.Report(string.Format(Resources.ErrTraceListenerThrowsExceptionOnWrite, ex.ToString()), Status.ERROR);
+                                StatusReporter.Report(string.Format(Resources.ErrTraceListenerThrowsExceptionOnWrite, ex.ToString()), Status.ERROR);
                             }
                         }
                     }
                 }
             }
+        }
+
 
         private XElement ComposeXmlMessage(TraceMessageSourceEntry message, TraceStreamOptions options)
-            {
+        {
             XElement element = new XElement(XName.Get(Names.TraceEntry));
 
+            var symbolExpression = message.Expression;
+
+            if (symbolExpression.IsValidValue)
+            {
+                var symbolElement = new XElement(XName.Get(Names.LocalVariableEntry));
+                symbolElement.SetAttributeValue(XName.Get(Names.LocalVariableEntryAttributeName), symbolExpression.Name);
+                symbolElement.SetAttributeValue(XName.Get(Names.LocalVariableEntryAttributeValue), symbolExpression.Value);
+                element.Add(symbolElement);
+            }
+
             if (options.IncludeDateTime)
-                {
+            {
                 element.Add(new XElement(XName.Get(Names.TimeStamp)), DateTime.Now.ToString());
-                }
+            }
+
             if (options.IncludeColumnNumber)
-                {
+            {
                 var colNumber = new XElement(XName.Get(Names.FileColumn), message.Breakpoint.FileColumn);
                 element.Add(colNumber);
-                }
+            }
             if (options.IncludeFileName)
-                {
+            {
                 var fileName = new XElement(XName.Get(Names.FileName), message.Breakpoint.File);
-                element.Add(fileName);                
-                }
+                element.Add(fileName);
+            }
             if (options.IncludeFunctionName)
-                {
+            {
                 var functionName = new XElement(XName.Get(Names.FunctionName), message.Breakpoint.FunctionName);
                 element.Add(functionName);
-                }
+            }
             if (options.IncludeLineNumber)
-                {
+            {
                 var lineNumber = new XElement(XName.Get(Names.FileLine), message.Breakpoint.FileLine);
                 element.Add(lineNumber);
-                }
+            }
             if (options.IncludeLocalVariables)
-                {
+            {
                 var localElement = new XElement(XName.Get(Names.Locals));
                 element.Add(localElement);
                 foreach (Expression variable in message.StackFrame.Locals)
-                    {
+                {
                     var localVariable = new XElement(XName.Get(Names.LocalVariableEntry));
                     localVariable.SetAttributeValue(XName.Get(Names.LocalVariableEntryAttributeName), variable.Name);
                     localVariable.SetAttributeValue(XName.Get(Names.LocalVariableEntryAttributeValue), variable.Value);
-                    }
+                    localElement.Add(localVariable);
                 }
-            return element;
             }
+            return element;
+        }
 
         private IEnumerable<TraceMessageSourceEntry> GetAllMessagesFromQueue()
-            {
-            List<TraceMessageSourceEntry> messageList = new List<TraceMessageSourceEntry> ();
+        {
+            List<TraceMessageSourceEntry> messageList = new List<TraceMessageSourceEntry>();
             TraceMessageSourceEntry message = null;
             lock (messages)
-                {
+            {
                 while (messages.Any())
-                    {
-                        message  = messages.Dequeue();
-                        messageList.Add(message);
-                    }
+                {
+                    message = messages.Dequeue();
+                    messageList.Add(message);
                 }
-            return messageList.AsEnumerable();
             }
+            return messageList.AsEnumerable();
         }
     }
+}

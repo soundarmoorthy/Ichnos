@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Tracing for AVR Studio")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AVREngineer")]
+[assembly: AssemblyCompany("Soundararajan")]
 [assembly: AssemblyProduct("Tracing for AVR Studio")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("No rights Reserved till 2050")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]   
-[assembly: ComVisible(false)]     
+[assembly: AssemblyCulture("Very good culture")]   
+[assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
 [assembly: NeutralResourcesLanguage("en-US")]
 
@@ -29,8 +29,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.*")]
+[assembly: AssemblyFileVersion("1.0.0.*")]
 
 
 

@@ -17,5 +17,6 @@ namespace IEngineer.Studio.Extensions.Ichnos
         internal static readonly string LocalVariableEntry = "Variable";
         internal static readonly string LocalVariableEntryAttributeName = "Name";
         internal static readonly string LocalVariableEntryAttributeValue = "Value";
+        internal static readonly string Symbol = "Symbol";
         }
     }
